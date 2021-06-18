@@ -106,36 +106,20 @@ const icons = [
 },
 ];
 
-// const {name, prefix, type, family} = icons;
-// icons.forEach(element => {
-//     document.getElementById('icon').innerHTML += `
-//     <div class="icons">
-//         <i class="${family} ${prefix}${name}"></i>
-//         <div>${name}</div>
-//     </div>
-//     `
-// });
-
-
-
 // Milestone 1 - Partendo dalla seguente struttura dati , 
-// mostriamo in pagina tutte le icone disponibili come da layout
-
-
-
-    
-icons.forEach(( element ) => {
+// mostriamo in pagina tutte le icone disponibili come da layout   
+icons.forEach((element) => {
         
 // destrutturo l'oggetto (element) per leggere le chiavi
-    const {name, prefix, family} = element;
+const {name, prefix, family} = element;
 
-    // utilizzo template literal per popolare html 
-    const iconHTML = `
-    <div class="icons">
-        <i class="${family} ${prefix}${name}"></i>
-        <div>${name}</div>
-    </div>
-    `
-    document.getElementById('icon').innerHTML += iconHTML;       
+// utilizzo template literal per popolare html 
+const iconHTML = `
+<div class="icons">
+    <i class="${family} ${prefix}${name}"></i>
+    <div>${name.toUpperCase()}</div>
+</div>
+`
+document.getElementById('icon').innerHTML += iconHTML;       
 });
     
