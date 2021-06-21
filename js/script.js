@@ -1,12 +1,4 @@
-// Milestone 1 Partendo dalla seguente struttura dati , 
-// mostriamo in pagina tutte le icone disponibili come da layout. 
-// Milestone 2 Coloriamo le icone per tipo
-// Milestone 3 Creiamo una select con i tipi di icone e usiamola per filtrare le icone
-
-
-
-// Milestone 1 Partendo dalla seguente struttura dati, 
-// mostriamo in pagina tutte le icone disponibili come da layout. 
+// Milestone 1 Partendo dalla seguente struttura dati , mostriamo in pagina tutte le icone disponibili come da layout. 
 const icons = [
     {
         name: 'cat',
@@ -106,44 +98,84 @@ const icons = [
     },
 ];
 
-// Milestone 1 - Partendo dalla seguente struttura dati , 
-// mostriamo in pagina tutte le icone disponibili come da layout   
-icons.forEach((element) => {
-        
-// destrutturo l'oggetto (element) per leggere le chiavi
-const {name, prefix, type, family} = element;
 
-// utilizzo template literal per popolare html 
-const iconHTML = `
-<div class="icons">
-    <i class="${family} ${prefix}${name}"></i>
-    <div>${name.toUpperCase()}</div>
-</div>
-`
-document.getElementById('icon').innerHTML += iconHTML;       
+//* inizializzo il filtro degli elementi all'inizio del ciclo
+const filterType = document.getElementById("filter-select");
+filterType.value = 'all';
+
+// stampo tutte le icone all'interno dell'HTML
+// Tutto questo viene sovrascritto dalle icone colorate stampate successivamente per cui ho fatto la funzione per resettare l'html. Il forEach successivo può anche essere eliminato
+icons.forEach((element,index) => {
+    const {name, prefix, family} = element;
+
+    document.getElementById('icons').innerHTML += 
+    `<div id="icon-${index}">
+        <i class="${family} ${prefix}${name}"></i>
+        <div class="uppercase">${name}</div>
+    </div>`
 });
-    
 
-// Milestone 2 Coloriamo le icone per tipo
-const colors = [
-    'red',
-    'blue',
-    'green'
-];
 
+
+//Milestone 2 Coloriamo le icone per tipo
+// aggiungo i colori all'interno dell'oggetto come proprietà
 const colorIcon = icons.map((element) => {
+    let color;
+    switch (element.type) {
+        case 'animal':
+            color = 'red';
+            break;
+        case 'vegetable':
+            color = 'green';
+            break;
+        case 'user':
+            color = 'purple';
+            break;
+    }
+    return {...element,color}
+});
 
-    return {
-        name,
-        prefix,
-        type,
-        family,
-        color : (gender == "female") ? pink : blue, 
+// creo una funzione per sbiancare la pagina prima di andare a scrivere nuovamente le icone questa volta colorate
+const resetHtml = () => {document.getElementById('icons').innerHTML = ''};
+resetHtml();
+
+// creo la funzione per stampare le icone colorate che mi può tornare utile dopo con il filter HTML
+const printColorIcon = (array) => {
+    array.forEach((element,index) => {
+        const {name, prefix, family, color} = element;
+    
+        document.getElementById('icons').innerHTML += 
+        `<div id="icon-${index}">
+            <i class="${family} ${prefix}${name}" style="color:${color};"></i>
+            <div class="uppercase">${name}</div>
+        </div>`
+    });
+};
+
+printColorIcon(colorIcon);
+
+
+
+// Milestone 3 Creiamo una select con i tipi di icone e usiamola per filtrare le icone
+// filtro gli elementi da visualizzare nella pagina HTML a seconda di cosa imposta l'utente nel filtro a tendina
+let typeIcons = [];
+colorIcon.forEach((element) => {
+    if(!typeIcons.includes(element.type)){
+        typeIcons.push(element.type);
+        document.getElementById('filter-select').innerHTML += 
+        `<option value=${element.type}>${element.type}</option>`;
     }
 });
-newCats.forEach((element) => {
-    document.getElementById('item').innerHTML += `</br>
-    ${element.nome} : <i class= "fas fa-cat" style="color: ${element.colore}"></i>
-    <i class="fas fa-ribbon" style="color:${element.ribbon.color}; opacity:${element.ribbon.opacity}"></i>,  
-    `;
+
+filterType.addEventListener("change", function() {
+    let iconsShow;
+
+    //* soluzione alternativa - più corta
+    iconsShow = colorIcon;
+    if(this.value != 'all'){
+        iconsShow = colorIcon.filter((element) => element.type == this.value);
+    }
+
+    resetHtml();
+    printColorIcon(iconsShow);
 });
