@@ -123,13 +123,13 @@ const colorIcon = icons.map((element) => {
     let color;
     switch (element.type) {
         case 'animal':
-            color = 'red';
+            color = 'black';
             break;
         case 'vegetable':
-            color = 'green';
+            color = 'blue';
             break;
         case 'user':
-            color = 'purple';
+            color = 'green';
             break;
     }
     return {...element,color}
